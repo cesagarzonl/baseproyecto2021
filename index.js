@@ -71,10 +71,10 @@ app.set('view engine', 'pug')
 
 app.use('/static', express.static(path.join(__dirname, './public')))
 
-app.set('/user',usuarioRouter)
+app.use('/user',usuarioRouter)
 
 app.get('/', function (req, res) {
-    return res.status(500).json({
+    return res.status(200).json({
         mensaje:'algo'
     })
 })
