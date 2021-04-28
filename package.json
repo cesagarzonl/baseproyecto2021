@@ -1,0 +1,33 @@
+{
+  "name": "baseproyecto2021",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cesagarzonl/baseproyecto2021.git"
+  },
+  "keywords": [
+    "base",
+    "usuarios",
+    "login"
+  ],
+  "author": "Cesar Garzon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cesagarzonl/baseproyecto2021/issues"
+  },
+  "homepage": "https://github.com/cesagarzonl/baseproyecto2021#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "mongoose": "^5.12.6",
+    "nodemailer": "^6.5.0",
+    "pug": "^3.0.2"
+  }
+}
