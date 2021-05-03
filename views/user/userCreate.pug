@@ -1,0 +1,8 @@
+extend ../layout.pug
+block content
+	form(action='/user/crear' method='post')
+			input(type='text' name='_id' value=usuario.id placeholder="id")
+			input(type='text' name='email' value=usuario.email placeholder="email")
+			input(type='text' name='usuario' value=usuario.usuario placeholder="usuario")
+			input(type='password' name='password' value=usuario.password placeholder="contraseña")
+			input(type='submit' name='enviar')

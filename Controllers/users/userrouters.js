@@ -5,12 +5,17 @@ const router = express.Router()
 const {
     listUser,
     CrearUser,
-    UserId
+    UserGetById,
+    CrearUserGet,
+    UserIdEdit,
+    UserIdEditPost
 } =require('./user')
 
 
 router.get('/',listUser)
-router.get('/crear',CrearUser)
-router.get('/edit/:_id',UserId)
+router.get('/crear',CrearUserGet)
+router.post('/crear',CrearUser)
+router.get('/byId/:_id',UserGetById)
+router.get('/edit/:_id',UserIdEdit)
 
 module.exports = router

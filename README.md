@@ -24,6 +24,7 @@ db.createUser(
   }
 )
 
+Iniciar proyecto : npm run local
 
 
 
