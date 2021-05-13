@@ -13,11 +13,11 @@ module.exports = function config () {
     // debug: true, // show debug output
   // logger: true // log information in console
   })
-  var ambiente = ''
+  const ambiente = ''
   const config = {
-    //Permisos mailgun
-    encryptionMethod :'AES-256-CBC',
-    secretEncript :"My32charPasswordAndInitVectorStr",
+    // Permisos mailgun
+    encryptionMethod: 'AES-256-CBC',
+    secretEncript: 'My32charPasswordAndInitVectorStr',
     desarrollo: true,
     public: '',
     port: 3000,
@@ -33,7 +33,7 @@ module.exports = function config () {
       logging: false,
       freezeTableName: false,
       // setup:false,   si setup esta en true borrara todas las base de datos y las bolvera a crear
-      //logging: s => console.log(s), //muestra todo lo de la base de datos
+      // logging: s => console.log(s), //muestra todo lo de la base de datos
       define: {
         charset: 'utf8',
         collate: 'utf8_general_ci',
@@ -41,9 +41,9 @@ module.exports = function config () {
       }
     },
     transporter: configEmail,
-    //Rango de paginacion
-    rango:15,//rango paginacion
-    urlLocal:''
+    // Rango de paginacion
+    rango: 15, // rango paginacion
+    urlLocal: ''
   }
 
   return config

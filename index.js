@@ -22,6 +22,7 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const conection = require('./models/conect/conect')
 const usuarioRouter = require('./Controllers/users/userrouters')
+const loginRouter = require('./Controllers/login/loginrouters')
 
 if (process.env.NODE_ENV == 'production') {
   https.createServer({
@@ -46,8 +47,8 @@ app.use(session({
 }))
 
 app.use(cookieParser())
-app.use(bodyParser.urlencoded({ parameterLimit: 100000, limit: '50mb', extended: true}))
-app.use(bodyParser.json({parameterLimit: 100000, limit: '50mb'}))
+app.use(bodyParser.urlencoded({ parameterLimit: 100000, limit: '50mb', extended: true }))
+app.use(bodyParser.json({ parameterLimit: 100000, limit: '50mb' }))
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -71,16 +72,17 @@ app.set('view engine', 'pug')
 
 app.use('/static', express.static(path.join(__dirname, './public')))
 
-app.use('/user',usuarioRouter)
+app.use('/user', usuarioRouter)
+app.use('/login', loginRouter)
 
 app.get('/', function (req, res) {
-    return res.status(200).json({
-        mensaje:'algo'
-    })
+  return res.status(200).json({
+    mensaje: 'algo'
+  })
 })
 
 app.use((err, req, res, next) => {
-  var content = req.headers['content-type']
+  const content = req.headers['content-type']
   console.log('Error dice: ', err)
   if (content === 'application/json') {
     return res.status(500).json({
@@ -92,9 +94,9 @@ app.use((err, req, res, next) => {
     )
   }
 
-  var menaje = err.message
+  const menaje = err.message
   if (menaje != 'Intentelo mas tarde DB') {
-    var novedad = 'Error'
+    const novedad = 'Error'
     return res.render('error', { menaje, novedad })
   }
 })
