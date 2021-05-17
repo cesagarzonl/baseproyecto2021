@@ -43,7 +43,8 @@ module.exports = function config () {
     transporter: configEmail,
     // Rango de paginacion
     rango: 15, // rango paginacion
-    urlLocal: ''
+    urlLocal: '',
+    secret:'Gato'
   }
 
   return config

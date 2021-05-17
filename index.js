@@ -57,9 +57,8 @@ app.use(function (req, res, next) {
 
   // intercepts OPTIONS method
   if (req.method === 'OPTIONS') {
-    console.log('metodoptions')
     // respond with 200
-    res.send(200)
+    res.sendStatus(200)
   } else {
     // move on
     next()
@@ -76,7 +75,7 @@ app.use('/user', usuarioRouter)
 app.use('/login', loginRouter)
 
 app.get('/', function (req, res) {
-  return res.status(200).json({
+  return res.status(200).send({
     mensaje: 'algo'
   })
 })
@@ -85,7 +84,7 @@ app.use((err, req, res, next) => {
   const content = req.headers['content-type']
   console.log('Error dice: ', err)
   if (content === 'application/json') {
-    return res.status(500).json({
+    return res.status(500).send({
       exitoso: false,
       codigo: 500,
       mensaje: 'Hubo un error inténtelo mas tarde.',

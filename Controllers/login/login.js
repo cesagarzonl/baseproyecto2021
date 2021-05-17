@@ -1,7 +1,8 @@
 const Usuario = require('../../models/user/userModel')
 const { reponsefallido, reponseExitoso } = require('../reponse/reponse')
 const jwt = require('jsonwebtoken')
-
+const config = require('../../Config/config')
+const secret = config().secret
 /**
  *
  * @param {_id:string} req
@@ -20,7 +21,7 @@ const Login = async function (req, res) {
       } else {
         if (usuario != null) {
           const token = jwt.sign(
-            { email: usuario.email, usuario: usuario.usuario, _id: usuario._id }, 'shhhhh')
+            { email: usuario.email, usuario: usuario.usuario, _id: usuario._id },secret)
           usuario.password = ''
           const data = { usuario, token }
           return reponseExitoso(res, true, 'ok', data)

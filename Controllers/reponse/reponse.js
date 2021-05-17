@@ -23,7 +23,7 @@ const reponsefallido = function (res, status, mensaje) {
  */
 
 const reponseExitoso = function (res, status, mensaje, data) {
-  return res.status(200).json({
+  return res.status(200).send({
     status,
     mensaje,
     data

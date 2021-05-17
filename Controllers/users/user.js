@@ -1,4 +1,5 @@
 const Usuario = require('../../models/user/userModel')
+const { reponsefallido, reponseExitoso } = require('../reponse/reponse')
 
 /**
  * Lista todos los usuarios
@@ -9,26 +10,13 @@ const listUser = async function (req, res) {
   Usuario.find({})
     .exec(function (err, usuario) {
       if (err) {
-        return res.status(500).json({
-          err
-        })
+        return reponsefallido(res, false, 'Ocurrio algo inesperado.')
       } else {
-        return res.status(200).json({
-          usuario
-        })
+        return reponseExitoso(res, true, 'ok', usuario)
 			  }
     })
 }
-/**
- * Crea usuario GEt
- * @param {email:string,password:string,usuario:string} req
- * @param {*} res
- */
 
-const CrearUserGet = async function (req, res) {
-  const usuario = {}
-  return res.render('./user/userCreate', { usuario })
-}
 
 /**
  * Crea usuario POST
@@ -85,31 +73,10 @@ const UserGetById = async function (req, res) {
     })
 }
 
-/**
- *
- * @param {_id:string} req
- * @param {*} res
- */
-const UserIdEdit = async function (req, res) {
-  const { _id } = req.params
-  Usuario.findOne({ _id })
-    .exec(function (err, usuario) {
-      if (err) {
-        console.log(err)
-      } else {
-        return res.render('./user/userCreate', { usuario })
 
-        /* return res.status(200).json({
-          usuario
-        }) */
-      }
-    })
-}
 
 module.exports = {
   listUser,
   CrearUser,
-  UserGetById,
-  CrearUserGet,
-  UserIdEdit
+  UserGetById
 }
