@@ -17,7 +17,7 @@ module.exports = function config () {
   const config = {
     // Permisos mailgun
     encryptionMethod: 'AES-256-CBC',
-    secretEncript: 'My32charPasswordAndInitVectorStr',
+    secretEncript: 'contrasenade32omascaraceteres',
     desarrollo: true,
     public: '',
     port: 3000,
@@ -44,7 +44,7 @@ module.exports = function config () {
     // Rango de paginacion
     rango: 15, // rango paginacion
     urlLocal: '',
-    secret:'Gato'
+    secret: 'Gato'
   }
 
   return config

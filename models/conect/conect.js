@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb')
+'use strict'
 const dbName = 'testDB'
 
 /* // Nombre de bd
@@ -20,7 +20,8 @@ const mongoose = require('mongoose')
 // colocamos la url de conexión local y el nombre de la base de datos
 mongoose.connect('mongodb://localhost:27017/' + dbName, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 })
 
 const db = mongoose.connection

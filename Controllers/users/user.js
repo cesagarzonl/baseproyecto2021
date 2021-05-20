@@ -13,10 +13,9 @@ const listUser = async function (req, res) {
         return reponsefallido(res, false, 'Ocurrio algo inesperado.')
       } else {
         return reponseExitoso(res, true, 'ok', usuario)
-			  }
+      }
     })
 }
-
 
 /**
  * Crea usuario POST
@@ -25,13 +24,13 @@ const listUser = async function (req, res) {
  */
 const CrearUser = async function (req, res) {
   const { email, password, usuario, _id } = req.body
-  if (_id == undefined || _id == null || _id == '') {
+  if (_id === undefined || _id === null || _id === '') {
     const user = new Usuario({
       usuario,
       email,
       password
     })
-    const usuarioNuevo = await user.save().then(data => {
+    await user.save().then(data => {
       return res.status(200).json({
         usuarioNuevo: data
       })
@@ -72,8 +71,6 @@ const UserGetById = async function (req, res) {
       }
     })
 }
-
-
 
 module.exports = {
   listUser,
