@@ -1,5 +1,5 @@
 'use strict'
-const Negocio = require('../../models/negocio/negocioservicio')
+const ProductoServicio = require('../../models/negocio/negocioservicio')
 const { reponsefallido, reponseExitoso } = require('../reponse/reponse')
 const { saveFile } = require('../../utils/savefile')
 /**
@@ -27,7 +27,6 @@ const Crearnegocio = async function (req, res) {
   const { nombre,descripcion, _id,file } = req.body
   let user = req.user._id
   let imagen = null
-
   if(file != null && file != '' && file){
 
   }
@@ -48,7 +47,6 @@ const Crearnegocio = async function (req, res) {
     })
   } else {
     imagen =  saveFile(file,_id,'./public/imgusers/')
-    console.log('imagen',imagen)
     ProductoServicio.findOneAndUpdate({ _id }, { nombre, descripcion, _id,imagen })
       .exec(function (err, productos) {
         if (err) {
