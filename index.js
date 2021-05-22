@@ -24,6 +24,7 @@ const conection = require('./models/conect/conect')
 const usuarioRouter = require('./Controllers/users/userrouters')
 const loginRouter = require('./Controllers/login/loginrouters')
 const productoRouter = require('./Controllers/productosservicios/productosserviciosrouter')
+const negocioRouter = require('./Controllers/negocio/negociorouters')
 
 if (process.env.NODE_ENV == 'production') {
   https.createServer({
@@ -73,6 +74,7 @@ app.set('view engine', 'pug')
 app.use('/static', express.static(path.join(__dirname, './public')))
 
 app.use('/user', usuarioRouter)
+app.use('/negocio', negocioRouter)
 app.use('/producto', productoRouter)
 app.use('/login', loginRouter)
 
