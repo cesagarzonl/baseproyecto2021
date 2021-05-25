@@ -1,5 +1,6 @@
 'use strict'
-const ProductoServicio = require('../../models/negocio/negocioservicio')
+const Negocio = require('../../models/negocio/negocioservicio')
+const ProductoServicio =  require('../../models/productosservicios/productosservicios')
 const { reponsefallido, reponseExitoso } = require('../reponse/reponse')
 const { saveFile } = require('../../utils/savefile')
 /**
@@ -8,11 +9,15 @@ const { saveFile } = require('../../utils/savefile')
  * @param {*} res
  */
 const listanegocio = async function (req, res) {
-  ProductoServicio.find({})
+  Negocio.find({})
+    .populate('usuario')
     .exec(function (err, productos) {
       if (err) {
+        console.log(err)
         return reponsefallido(res, false, 'Ocurrio algo inesperado.')
       } else {
+
+
         return reponseExitoso(res, true, 'ok', productos)
       }
     })
@@ -25,29 +30,46 @@ const listanegocio = async function (req, res) {
  */
 const Crearnegocio = async function (req, res) {
   const { nombre,descripcion, _id,file } = req.body
-  let user = req.user._id
+  let usuario = req.user._id
   let imagen = null
   if(file != null && file != '' && file){
 
   }
 
   if (_id === undefined || _id === null || _id === '') {
-    const producto = new ProductoServicio({
+    const producto = new Negocio({
       nombre,
-      user,
+      usuario,
       descripcion,
       imagen
     })
     await producto.save().then(data => {
-      imagen =  saveFile(file,data._id,'./public/negocios/')
-      return reponseExitoso(res, true, 'ok', { productos: data })
+      if (file != null){
+        imagen = saveFile(file,_id,'./public/negocios/')
+      }else{
+        imagen = null
+      }
+      console.log(imagen)
+      let _idUpdate = data._id
+      Negocio.findOneAndUpdate({ _id:_idUpdate }, { imagen })
+      .exec(function (err, productos) {
+        if (err) {
+          return reponsefallido(res, false, err)
+        } else {
+          return reponseExitoso(res, true, 'ok', productos)
+        }
+      })
     }, err => {
       const menssaje = err
       return reponsefallido(res, false, menssaje)
     })
   } else {
-    imagen =  saveFile(file,_id,'./public/imgusers/')
-    ProductoServicio.findOneAndUpdate({ _id }, { nombre, descripcion, _id,imagen })
+    if (file != null){
+      imagen = saveFile(file,_id,'./public/negocios/')
+    }else{
+      imagen = null
+    }
+    Negocio.findOneAndUpdate({ _id }, { nombre, descripcion,imagen })
       .exec(function (err, productos) {
         if (err) {
           return reponsefallido(res, false, err)
@@ -65,12 +87,30 @@ const Crearnegocio = async function (req, res) {
    */
 const NegocioGetById = async function (req, res) {
   const { _id } = req.params
-  ProductoServicio.findOne({ _id })
-    .exec(function (err, producto) {
+  let productos = await ProductoServicio.find({negocio:_id}).exec()
+  Negocio.findOne({ _id })
+    .exec(function (err, negocio) {
       if (err) {
         return reponsefallido(res, false, err)
       } else {
-        return reponseExitoso(res, true, 'ok', producto)
+        return reponseExitoso(res, true, 'ok', {negocio,productos})
+      }
+    })
+}
+
+/**
+   *
+   * @param {_id:string} req
+   * @param {*} res
+   */
+ const NegocioGetByUsuario = async function (req, res) {
+  let usuario = req.user._id
+  Negocio.find({ usuario })
+    .exec(function (err, negocio) {
+      if (err) {
+        return reponsefallido(res, false, err)
+      } else {
+        return reponseExitoso(res, true, 'ok', {negocio})
       }
     })
 }
@@ -78,5 +118,6 @@ const NegocioGetById = async function (req, res) {
 module.exports = {
     listanegocio,
     Crearnegocio,
-    NegocioGetById
+    NegocioGetById,
+    NegocioGetByUsuario
 }

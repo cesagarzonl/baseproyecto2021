@@ -24,7 +24,7 @@ const listproductos = async function (req, res) {
  * @param {*} res
  */
 const CrearProducto = async function (req, res) {
-  const { nombre,descripcion, _id,file } = req.body
+  const { nombre,descripcion, _id,file,negocio } = req.body
   let user = req.user._id
   let imagen = null
 
@@ -37,10 +37,16 @@ const CrearProducto = async function (req, res) {
       nombre,
       user,
       descripcion,
-      imagen
+      imagen,
+      negocio
     })
     await producto.save().then(data => {
-      imagen =  saveFile(file,data._id,'./public/imgusers/')
+      if (file != null){
+        imagen = saveFile(file,_id,'./public/imgusers/')
+      }else{
+        imagen = null
+      }
+      producto.imagen = imagen
       return reponseExitoso(res, true, 'ok', { productos: data })
     }, err => {
       const menssaje = err
@@ -48,7 +54,6 @@ const CrearProducto = async function (req, res) {
     })
   } else {
     imagen =  saveFile(file,_id,'./public/imgusers/')
-    console.log('imagen',imagen)
     ProductoServicio.findOneAndUpdate({ _id }, { nombre, descripcion, _id,imagen })
       .exec(function (err, productos) {
         if (err) {
