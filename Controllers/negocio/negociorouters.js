@@ -6,13 +6,15 @@ const {
     listanegocio,
     Crearnegocio,
     NegocioGetById,
-    NegocioGetByUsuario
+    NegocioGetByUsuario,
+    NegociosProductosDestacados
 } = require('./negocio')
 
-router.get('/', validateTokenJWT, listanegocio)
+router.get('/', listanegocio)
 router.post('/crear', validateTokenJWT, Crearnegocio)
-router.get('/byId/:_id', validateTokenJWT, NegocioGetById)
+router.get('/byId/:_id', NegocioGetById)
 router.get('/empresasUser', validateTokenJWT,NegocioGetByUsuario)
+router.get('/destacados',NegociosProductosDestacados)
 
 NegocioGetByUsuario
 module.exports = router

@@ -115,9 +115,32 @@ const NegocioGetById = async function (req, res) {
     })
 }
 
+/**
+   *
+   * @param {_id:string} req
+   * @param {*} res
+   */
+ const NegociosProductosDestacados = async function (req, res) {
+  const { _id } = req.params
+  let productos = await ProductoServicio.find().limit(4).exec()
+  Negocio.find()
+    .limit(4)
+    .exec(function (err, negocio) {
+      if (err) {
+        return reponsefallido(res, false, err)
+      } else {
+        return reponseExitoso(res, true, 'ok', {negocio,productos})
+      }
+    })
+}
+
+
+
+
 module.exports = {
     listanegocio,
     Crearnegocio,
     NegocioGetById,
-    NegocioGetByUsuario
+    NegocioGetByUsuario,
+    NegociosProductosDestacados
 }

@@ -8,8 +8,8 @@ const {
   ProductoGetById
 } = require('./productosservicios')
 
-router.get('/', validateTokenJWT, listproductos)
+router.get('/', listproductos)
 router.post('/crear', validateTokenJWT, CrearProducto)
-router.get('/byId/:_id', validateTokenJWT, ProductoGetById)
+router.get('/byId/:_id', ProductoGetById)
 
 module.exports = router
