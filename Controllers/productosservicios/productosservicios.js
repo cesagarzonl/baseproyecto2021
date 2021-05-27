@@ -1,5 +1,6 @@
 'use strict'
 const ProductoServicio = require('../../models/productosservicios/productosservicios')
+const Caracteristicas = require('../../models/caracteristicas/caracteristicas')
 const { reponsefallido, reponseExitoso } = require('../reponse/reponse')
 const { saveFile } = require('../../utils/savefile')
 /**
@@ -24,13 +25,10 @@ const listproductos = async function (req, res) {
  * @param {*} res
  */
 const CrearProducto = async function (req, res) {
-  const { nombre,descripcion, _id,file,negocio } = req.body
+  const { nombre,descripcion, _id,file,negocio ,caracteretisticas} = req.body
+
   let user = req.user._id
   let imagen = null
-
-  if(file != null && file != '' && file){
-
-  }
 
   if (_id === undefined || _id === null || _id === '') {
     const producto = new ProductoServicio({
@@ -42,26 +40,57 @@ const CrearProducto = async function (req, res) {
     })
     await producto.save().then(data => {
       if (file != null){
-        imagen = saveFile(file,_id,'./public/imgusers/')
+        imagen = saveFile(file,data._id,'./public/imgusers/')
       }else{
         imagen = null
       }
-      producto.imagen = imagen
-      return reponseExitoso(res, true, 'ok', { productos: data })
+      let _idUpdate = data._id
+
+      ProductoServicio.findOneAndUpdate({ _id:_idUpdate }, { imagen })
+      .exec(function (err, productos) {
+        if (err) {
+          return reponsefallido(res, false, err)
+        } else {
+          return reponseExitoso(res, true, 'ok', { productos })
+        }
+      })
+
     }, err => {
       const menssaje = err
       return reponsefallido(res, false, menssaje)
     })
   } else {
-    imagen =  saveFile(file,_id,'./public/imgusers/')
-    ProductoServicio.findOneAndUpdate({ _id }, { nombre, descripcion, _id,imagen })
-      .exec(function (err, productos) {
+    if (imagen != null){
+      imagen =  saveFile(file,_id,'./public/imgusers/')
+    }
+
+    let prodSer = await ProductoServicio.findOne({ _id }).exec()
+    if(prodSer){
+      prodSer.nombre = nombre
+      prodSer.descripcion = descripcion
+      if(imagen != null){
+        prodSer.imagen = imagen
+      }
+      for (let index = 0; index < caracteretisticas.length; index++) {
+        const element = caracteretisticas[index];
+        const carac = new Caracteristicas({
+          productoServicio:_id,
+          descripcion:element,
+          usuario:user,
+        })
+        carac.save()      
+      }
+
+      prodSer.save(function (err, productos) {
         if (err) {
           return reponsefallido(res, false, err)
         } else {
           return reponseExitoso(res, true, 'ok', productos)
         }
       })
+
+  
+    }
   }
 }
 
@@ -72,12 +101,13 @@ const CrearProducto = async function (req, res) {
    */
 const ProductoGetById = async function (req, res) {
   const { _id } = req.params
+  let caracteristicas = await Caracteristicas.find({productoServicio:_id}).exec()
   ProductoServicio.findOne({ _id })
     .exec(function (err, producto) {
       if (err) {
         return reponsefallido(res, false, err)
       } else {
-        return reponseExitoso(res, true, 'ok', producto)
+        return reponseExitoso(res, true, 'ok', {producto,caracteristicas})
       }
     })
 }
