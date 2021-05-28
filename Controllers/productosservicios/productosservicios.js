@@ -103,7 +103,8 @@ const ProductoGetById = async function (req, res) {
   const { _id } = req.params
   let caracteristicas = await Caracteristicas.find({productoServicio:_id}).exec()
   ProductoServicio.findOne({ _id })
-    .exec(function (err, producto) {
+  .populate('negocio')
+  .exec(function (err, producto) {
       if (err) {
         return reponsefallido(res, false, err)
       } else {

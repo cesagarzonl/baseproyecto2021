@@ -13,7 +13,6 @@ const listanegocio = async function (req, res) {
     .populate('usuario')
     .exec(function (err, productos) {
       if (err) {
-        console.log(err)
         return reponsefallido(res, false, 'Ocurrio algo inesperado.')
       } else {
 
@@ -29,7 +28,18 @@ const listanegocio = async function (req, res) {
  * @param {*} res
  */
 const Crearnegocio = async function (req, res) {
-  const { nombre,descripcion, _id,file } = req.body
+  const { 
+    nombre,
+    descripcion,
+    _id,
+    file,
+    correo,
+    telefono,
+    instagram,
+    facebook,
+    whatsapp,
+    twitter } = req.body
+
   let usuario = req.user._id
   let imagen = null
   if(file != null && file != '' && file){
@@ -41,7 +51,13 @@ const Crearnegocio = async function (req, res) {
       nombre,
       usuario,
       descripcion,
-      imagen
+      imagen,
+      correo,
+      telefono,
+      instagram,
+      facebook,
+      whatsapp,
+      twitter
     })
     await producto.save().then(data => {
       if (file != null){
@@ -49,7 +65,7 @@ const Crearnegocio = async function (req, res) {
       }else{
         imagen = null
       }
-      console.log(imagen)
+
       let _idUpdate = data._id
       Negocio.findOneAndUpdate({ _id:_idUpdate }, { imagen })
       .exec(function (err, productos) {
@@ -69,14 +85,28 @@ const Crearnegocio = async function (req, res) {
     }else{
       imagen = null
     }
-    Negocio.findOneAndUpdate({ _id }, { nombre, descripcion,imagen })
-      .exec(function (err, productos) {
+
+    let NegocioLocal = await Negocio.findOne({ _id }).exec()
+    if(NegocioLocal){
+      NegocioLocal.nombre = nombre
+      NegocioLocal.descripcion = descripcion
+      NegocioLocal.correo = correo
+      NegocioLocal.telefono = telefono
+      NegocioLocal.instagram = instagram
+      NegocioLocal.facebook = facebook
+      NegocioLocal.whatsapp = whatsapp
+      NegocioLocal.twitter = twitter
+      if(imagen != null){
+        NegocioLocal.imagen = imagen
+      }
+      NegocioLocal.save(function (err, productos) {
         if (err) {
           return reponsefallido(res, false, err)
         } else {
           return reponseExitoso(res, true, 'ok', productos)
         }
       })
+    }
   }
 }
 
