@@ -22,11 +22,9 @@ const middelwares = {
         req.user = usuario
         next()
       } else {
-        console.log('error')
         return reponsefallido(res, false, 'hubo un error intentalo mas tarde')
       }
     } else {
-      console.log('error1')
       return reponsefallido(res, false, 'hubo un error intentalo mas tarde')
     }
   }

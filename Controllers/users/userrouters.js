@@ -8,7 +8,7 @@ const {
   UserGetById
 } = require('./user')
 
-router.get('/', validateTokenJWT, listUser)
+router.get('/', /*validateTokenJWT,*/ listUser)
 router.post('/crear', CrearUser)
 router.get('/byId/:_id', UserGetById)
 

@@ -26,6 +26,8 @@ const loginRouter = require('./Controllers/login/loginrouters')
 const productoRouter = require('./Controllers/productosservicios/productosserviciosrouter')
 const negocioRouter = require('./Controllers/negocio/negociorouters')
 const CaracteristicasRouter = require('./Controllers/caracteristicas/caracteristicasrouters')
+const Contacto = require('./Controllers/contacto/contactorouter')
+
 
 if (process.env.NODE_ENV == 'production') {
   https.createServer({
@@ -79,6 +81,7 @@ app.use('/negocio', negocioRouter)
 app.use('/producto', productoRouter)
 app.use('/login', loginRouter)
 app.use('/caracteristicas',CaracteristicasRouter)
+app.use('/contacto',Contacto)
 
 app.get('/', function (req, res) {
   return res.status(200).send({

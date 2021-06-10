@@ -25,7 +25,7 @@ const listproductos = async function (req, res) {
  * @param {*} res
  */
 const CrearProducto = async function (req, res) {
-  const { nombre,descripcion, _id,file,negocio ,caracteretisticas} = req.body
+  const { nombre,descripcion, _id,file,negocio ,caracteretisticas, valor} = req.body
 
   let user = req.user._id
   let imagen = null
@@ -36,7 +36,8 @@ const CrearProducto = async function (req, res) {
       user,
       descripcion,
       imagen,
-      negocio
+      negocio,
+      valor
     })
     await producto.save().then(data => {
       if (file != null){
@@ -68,18 +69,20 @@ const CrearProducto = async function (req, res) {
     if(prodSer){
       prodSer.nombre = nombre
       prodSer.descripcion = descripcion
+      prodSer.valor = valor
       if(imagen != null){
         prodSer.imagen = imagen
       }
-      for (let index = 0; index < caracteretisticas.length; index++) {
+      /*for (let index = 0; index < caracteretisticas.length; index++) {
         const element = caracteretisticas[index];
         const carac = new Caracteristicas({
           productoServicio:_id,
           descripcion:element,
           usuario:user,
+          valor:valor,
         })
         carac.save()      
-      }
+      }*/
 
       prodSer.save(function (err, productos) {
         if (err) {
@@ -112,9 +115,27 @@ const ProductoGetById = async function (req, res) {
       }
     })
 }
+/**
+   *
+   * @param {_id:string} req
+   * @param {*} res
+   */
+ const ProductoCategoryDeleteById = async function (req, res) {
+  const { _id } = req.params
+  await Caracteristicas.deleteMany({productoServicio:_id})
+    .exec(function (err, caracteristicas) {
+      if (err) {
+
+        return reponsefallido(res, false, err)
+      } else {
+        return reponseExitoso(res, true, 'ok', {caracteristicas})
+      }
+    })
+}
 
 module.exports = {
   listproductos,
   CrearProducto,
-  ProductoGetById
+  ProductoGetById,
+  ProductoCategoryDeleteById
 }
