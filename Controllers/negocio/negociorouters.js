@@ -11,6 +11,7 @@ const {
 } = require('./negocio')
 
 router.get('/', listanegocio)
+router.get('/misnegocios',validateTokenJWT, listanegocio)
 router.post('/crear', validateTokenJWT, Crearnegocio)
 router.get('/byId/:_id', NegocioGetById)
 router.get('/empresasUser', validateTokenJWT,NegocioGetByUsuario)

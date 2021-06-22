@@ -10,6 +10,7 @@ const {
 } = require('./productosservicios')
 
 router.get('/', listproductos)
+router.get('/:misproductos',validateTokenJWT ,listproductos)
 router.post('/crear', validateTokenJWT, CrearProducto)
 router.get('/byId/:_id', ProductoGetById)
 router.get('/deleteCaracteresiticas/:_id',ProductoCategoryDeleteById)

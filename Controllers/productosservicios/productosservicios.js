@@ -9,7 +9,15 @@ const { saveFile } = require('../../utils/savefile')
  * @param {*} res
  */
 const listproductos = async function (req, res) {
-  ProductoServicio.find({})
+  //usuario
+  let  {misproductos} = req.params
+  let filtter = {}
+
+  if(misproductos){
+    filtter = {usuario:req.user._id}
+  }
+  console.log('filtter',filtter)
+  ProductoServicio.find(filtter)
     .exec(function (err, productos) {
       if (err) {
         return reponsefallido(res, false, 'Ocurrio algo inesperado.')
@@ -37,7 +45,8 @@ const CrearProducto = async function (req, res) {
       descripcion,
       imagen,
       negocio,
-      valor
+      valor,
+      usuario:user
     })
     await producto.save().then(data => {
       if (file != null){

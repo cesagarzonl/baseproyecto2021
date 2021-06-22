@@ -9,7 +9,15 @@ const { saveFile } = require('../../utils/savefile')
  * @param {*} res
  */
 const listanegocio = async function (req, res) {
-  Negocio.find({})
+
+  let  {misnegocios} = req.params
+  let filtter = {}
+
+  if(misnegocios){
+    filtter = {usuario:req.user._id}
+  }
+
+  Negocio.find(filtter)
     .populate('usuario')
     .exec(function (err, productos) {
       if (err) {
