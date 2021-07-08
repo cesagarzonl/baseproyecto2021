@@ -31,3 +31,8 @@ Iniciar proyecto : npm run local
 
 acceso a la base de datos
 mongo localhost/admin -u admin -p
+
+
+
+Heroku 
+heroku logs --tail --app shielded-atoll-87422
