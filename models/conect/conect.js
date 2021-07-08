@@ -1,5 +1,5 @@
 'use strict'
-const dbName = 'testDB'
+const dbName = 'myFirstDatabase'
 
 /* // Nombre de bd
 // Conexión URL (estas corriendo en local :D)
@@ -18,7 +18,7 @@ module.exports = async () => {
 
 const mongoose = require('mongoose')
 // colocamos la url de conexión local y el nombre de la base de datos
-mongoose.connect('mongodb://localhost:27017/' + dbName, {
+mongoose.connect('mongodb+srv://@cluster0.6vvxc.mongodb.net/' + dbName, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
