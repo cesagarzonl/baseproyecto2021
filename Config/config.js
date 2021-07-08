@@ -20,7 +20,7 @@ module.exports = function config () {
     secretEncript: 'contrasenade32omascaraceteres',
     desarrollo: true,
     public: '',
-    port: 3000,
+    port: 80,
     secure: false,
     charset: 'utf8',
     configmysql: {
