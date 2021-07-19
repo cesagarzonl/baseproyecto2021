@@ -5,7 +5,7 @@
 
 const configserve = require('./Config/config')
 const configmysql = configserve().configmysql
-const PORT = configserve().port
+const PORT =  process.env.PORT  || configserve().port
 const key = configserve().key
 const cert = configserve().cert
 const keyruta = configserve().keyruta
