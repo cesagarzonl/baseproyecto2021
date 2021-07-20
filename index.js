@@ -30,13 +30,16 @@ const Contacto = require('./Controllers/contacto/contactorouter')
 
 
 if (process.env.NODE_ENV == 'production') {
-  https.createServer({
+  app.listen(PORT, async function () {
+    console.log(`App listening on ${PORT} !`)
+  })
+  /*https.createServer({
     ca: [fs.readFileSync(ca_root), fs.readFileSync(ca_bundle)],
     key: fs.readFileSync(keyruta),
     cert: fs.readFileSync(certruta)
   }, app).listen(PORT, function () {
     console.log(`App listening on ${PORT} !`)
-  })
+  })*/
 } else {
   app.listen(PORT, async function () {
     console.log(`App listening on ${PORT} !`)
