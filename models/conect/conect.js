@@ -18,7 +18,9 @@ module.exports = async () => {
 
 const mongoose = require('mongoose')
 // colocamos la url de conexión local y el nombre de la base de datos
-mongoose.connect('mongodb+srv://@cluster0.6vvxc.mongodb.net/' + dbName+'?authSource=admin', {
+//mongoose.connect('mongodb://username:password@host:port/database,mongodb://username:password@host:port,mongodb://username:password@host:port' [, options]);
+
+mongoose.connect('mongodb+srv://prueba1:fFCTUlWroiWyhcvu@cluster0.6vvxc.mongodb.net/' + dbName+'?authSource=admin', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: true
