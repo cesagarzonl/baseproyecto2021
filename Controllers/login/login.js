@@ -3,16 +3,26 @@ const { reponsefallido, reponseExitoso } = require('../reponse/reponse')
 const jwt = require('jsonwebtoken')
 const config = require('../../Config/config')
 const secret = config().secret
+const { encrypt } = require('../../utils/encript')
+
+
 /**
  *
  * @param {_id:string} req
  * @param {*} res
  */
 const Login = async function (req, res) {
-  const { email, password } = req.body
+  const { email } = req.body
+  let { password } = req.body
+
+
   if (!email || !password) {
     return reponsefallido(res, false, 'Usuario y contraseña son requeridos.')
   }
+
+  password = await encrypt(password).encryptedData
+
+
 
   Usuario.findOne({ email, password })
     .exec(function (err, usuario) {

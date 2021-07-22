@@ -34,6 +34,7 @@ const CrearContacto = async function (req, res) {
     await user.save().then(data => {
         return reponseExitoso(res, true, 'ok', {data:data})
     }, err => {
+      console.log('err',err)
       const menssaje = err
       return reponsefallido(res, false, err)
     })
@@ -43,6 +44,7 @@ const CrearContacto = async function (req, res) {
       ContactoLocal.procesado = procesado
       ContactoLocal.save(function (err, contacto) {
         if (err) {
+          console.log('err',err)
           return reponsefallido(res, false, err)
         } else {
           return reponseExitoso(res, true, 'ok', {data:contacto})

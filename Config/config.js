@@ -17,7 +17,7 @@ module.exports = function config () {
   const config = {
     // Permisos mailgun
     encryptionMethod: 'AES-256-CBC',
-    secretEncript: 'contrasenade32omascaraceteres',
+    secretEncript: 'contrasenade32omascaraceteres123',
     desarrollo: true,
     public: '',
     port:process.env.PORT || 3000,

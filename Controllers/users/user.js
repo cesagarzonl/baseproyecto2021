@@ -1,5 +1,9 @@
 const Usuario = require('../../models/user/userModel')
 const { reponsefallido, reponseExitoso } = require('../reponse/reponse')
+const jwt = require('jsonwebtoken')
+const config = require('../../Config/config')
+const secret = config().secret
+const { encrypt } = require('../../utils/encript')
 
 /**
  * Lista todos los usuarios
@@ -23,22 +27,27 @@ const listUser = async function (req, res) {
  * @param {*} res
  */
 const CrearUser = async function (req, res) {
-  const { email, password, usuario, _id } = req.body
+  const { email, usuario, _id } = req.body
+  let { password } = req.body
+  password = await encrypt(password).encryptedData
+
   if (_id === undefined || _id === null || _id === '') {
     const user = new Usuario({
       usuario,
       email,
       password
     })
+
     await user.save().then(data => {
-      return res.status(200).json({
-        usuarioNuevo: data
-      })
+      const token = jwt.sign({ email: data.email, usuario: data.usuario, _id: data._id }, secret)
+      data.password = ''
+      const datafinal = { usuario:data, token }
+
+      return reponseExitoso(res, true, 'Bienvenido', {data:datafinal})
+
     }, err => {
       const menssaje = err
-      return res.status(201).json({
-        menssaje: menssaje.message
-      })
+      return reponseExitoso(res, false, menssaje.message,)
     })
   } else {
     Usuario.findOneAndUpdate({ _id }, { email, password, usuario, _id })
