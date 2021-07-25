@@ -5,11 +5,12 @@ const { validateTokenJWT } = require('../../middlewares/auth')
 const {
   listUser,
   CrearUser,
-  UserGetById
+  UserGetById,
+  UserOlvidoClave
 } = require('./user')
 
 router.get('/', /*validateTokenJWT,*/ listUser)
 router.post('/crear', CrearUser)
 router.get('/byId/:_id', UserGetById)
-
+router.post('/olvido', UserOlvidoClave)
 module.exports = router

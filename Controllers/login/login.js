@@ -27,7 +27,7 @@ const Login = async function (req, res) {
   Usuario.findOne({ email, password })
     .exec(function (err, usuario) {
       if (err) {
-        return reponsefallido(res, false, 'Usuario o correo No conciden')
+        return reponsefallido(res, false, 'Usuario o correo No coinciden')
       } else {
         if (usuario != null) {
           const token = jwt.sign(
@@ -36,7 +36,7 @@ const Login = async function (req, res) {
           const data = { usuario, token }
           return reponseExitoso(res, true, 'ok', data)
         } else {
-          return reponsefallido(res, false, 'Usuario o correo No conciden')
+          return reponsefallido(res, false, 'Usuario o correo No coinciden')
         }
       }
     })

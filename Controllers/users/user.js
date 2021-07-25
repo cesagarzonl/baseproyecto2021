@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken')
 const config = require('../../Config/config')
 const secret = config().secret
 const { encrypt } = require('../../utils/encript')
-
+const { randomString } = require('../../utils/randomCode')
+const { correoenvio } = require('../SendEmail/SendEmail')
 /**
  * Lista todos los usuarios
  * @param {*} req
@@ -53,7 +54,7 @@ const CrearUser = async function (req, res) {
     Usuario.findOneAndUpdate({ _id }, { email, password, usuario, _id })
       .exec(function (err, usuario) {
         if (err) {
-          console.log(err)
+          return reponsefallido(res, false, 'Ocurrio algo inesperado.')
         } else {
           const redireccion = '/user/edit/' + _id
           res.redirect(redireccion)
@@ -63,7 +64,7 @@ const CrearUser = async function (req, res) {
 }
 
 /**
- *
+ * get user by id
  * @param {_id:string} req
  * @param {*} res
  */
@@ -72,10 +73,43 @@ const UserGetById = async function (req, res) {
   Usuario.findOne({ _id })
     .exec(function (err, usuario) {
       if (err) {
-        console.log(err)
+        return reponsefallido(res, false, 'Ocurrio algo inesperado.')
       } else {
-        return res.status(200).json({
-          usuario
+        return reponseExitoso(res, true, 'ok', usuario)
+      }
+    })
+}
+
+/**
+ * Olvido contraseña
+ * @param {_id:string} req
+ * @param {*} res
+ */
+ const UserOlvidoClave = async function (req, res) {
+  const { email } = req.body
+  Usuario.findOne({ email })
+    .exec(function (err, usuario) {
+      if (err) {
+        return reponsefallido(res, false, 'Ocurrio algo inesperado.')
+      } else {
+
+        if(!usuario){
+          return reponsefallido(res, false, 'El correo '+email+' No existe en nuestros registros')
+        }
+        let dd = randomString(10)
+        usuario.password = encrypt(dd).encryptedData
+        usuario.cambioPW = true
+        usuario.save(async function (err, usuario) {
+          if (err) {
+            return reponsefallido(res, false, err)
+          } else {
+            let envioCorreo = await correoenvio(email,'<p>Nueva Calve :'+dd+' </p>')
+            if  (envioCorreo){
+              return reponseExitoso(res, true, 'Se ha iniciado proceso de cambio de cambio de clave, le llegara un correo a '+email,null)
+            }else{
+              return reponseExitoso(res, true, 'ok', usuario)
+            }
+          }
         })
       }
     })
@@ -84,5 +118,6 @@ const UserGetById = async function (req, res) {
 module.exports = {
   listUser,
   CrearUser,
-  UserGetById
+  UserGetById,
+  UserOlvidoClave
 }

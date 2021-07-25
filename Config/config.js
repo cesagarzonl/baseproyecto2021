@@ -23,7 +23,7 @@ module.exports = function config () {
     port:process.env.PORT || 3000,
     secure: false,
     charset: 'utf8',
-    configmysql: {
+    /*configmysql: {
       database: process.env.DB_NAME || 'database',
       username: process.env.DB_USER || 'root',
       password: process.env.DB_PASS || '123456',
@@ -39,7 +39,7 @@ module.exports = function config () {
         collate: 'utf8_general_ci',
         timestamps: true
       }
-    },
+    },*/
     transporter: configEmail,
     // Rango de paginacion
     rango: 15, // rango paginacion
