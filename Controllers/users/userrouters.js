@@ -6,11 +6,13 @@ const {
   listUser,
   CrearUser,
   UserGetById,
-  UserOlvidoClave
+  UserOlvidoClave,
+  CambioClave
 } = require('./user')
 
 router.get('/', /*validateTokenJWT,*/ listUser)
 router.post('/crear', CrearUser)
 router.get('/byId/:_id', UserGetById)
 router.post('/olvido', UserOlvidoClave)
+router.post('/cambioclave',validateTokenJWT,CambioClave)
 module.exports = router

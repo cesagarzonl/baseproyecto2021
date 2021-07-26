@@ -30,9 +30,10 @@ const listUser = async function (req, res) {
 const CrearUser = async function (req, res) {
   const { email, usuario, _id } = req.body
   let { password } = req.body
-  password = await encrypt(password).encryptedData
+
 
   if (_id === undefined || _id === null || _id === '') {
+    password = await encrypt(password).encryptedData
     const user = new Usuario({
       usuario,
       email,
@@ -51,15 +52,23 @@ const CrearUser = async function (req, res) {
       return reponseExitoso(res, false, menssaje.message,)
     })
   } else {
-    Usuario.findOneAndUpdate({ _id }, { email, password, usuario, _id })
-      .exec(function (err, usuario) {
-        if (err) {
-          return reponsefallido(res, false, 'Ocurrio algo inesperado.')
-        } else {
-          const redireccion = '/user/edit/' + _id
-          res.redirect(redireccion)
-        }
-      })
+
+    Usuario.findOne({ _id })
+    .exec(function (err, usuariolocal) {
+      if (err) {
+        return reponsefallido(res, false, 'Ocurrio algo inesperado.',)
+      } else {
+        usuariolocal.email = email
+        usuariolocal.usuario = usuario
+        usuariolocal.save(async function (err, usuario){
+          if (err) {
+            return reponsefallido(res, false, 'Ocurrio algo inesperado.',err)
+          } else {
+            return reponseExitoso(res, true, 'Se actualizo la el usuario correctamente',usuario)
+          }
+        })
+      }
+    })
   }
 }
 
@@ -115,9 +124,41 @@ const UserGetById = async function (req, res) {
     })
 }
 
+
+/**
+ * Cambio de clave
+ * @param {_id:string} req
+ * @param {*} res
+ */
+ const CambioClave = async function (req, res) {
+  let { _id } = req.user
+  let { password } = req.body
+
+  Usuario.findOne({ _id })
+  .exec(function (err, usuario) {
+    if (err) {
+      return reponsefallido(res, false, 'Ocurrio algo inesperado.')
+    } else {
+      if(!usuario){
+        return reponsefallido(res, false, 'El usuasrio No existe en nuestros registros')
+      }
+      usuario.password = encrypt(password).encryptedData
+      usuario.save(async function (err, usuario){
+        if (err) {
+          return reponsefallido(res, false, 'Ocurrio algo inesperado.')
+        } else {
+          return reponseExitoso(res, true, 'Se actualizo la contraseña correctamente')
+        }
+      })
+    }
+  })
+}
+
+
 module.exports = {
   listUser,
   CrearUser,
   UserGetById,
-  UserOlvidoClave
+  UserOlvidoClave,
+  CambioClave
 }
